@@ -1,6 +1,8 @@
 public with sharing class FieldRollup {
     
     @AuraEnabled
+    public String id;
+    @AuraEnabled
     public String label;
     @AuraEnabled
     public Object value;
@@ -9,13 +11,32 @@ public with sharing class FieldRollup {
     @AuraEnabled
     public Boolean isCurrency;
 
-    public FieldRollup(String label, Object value, Schema.DisplayType fieldType) {
+    public String parentId;
+    public String parentObjectName;
+    public String childObjectName;
+    public String childRelationshipName;
+    public String rollupType;
+    public String rollupFieldName;
+
+    public FieldRollup(Id id, String label, Object value, Schema.DisplayType fieldType) {
+        this.id = id;
         this.label = label;
         this.value = value;
         this.isCurrency = isCurrency(fieldType);
         if (this.value != null && !this.isCurrency) {
             this.formattedValue = formatValue(value, fieldType);
         }
+    }
+
+    public FieldRollup__c convertToSF() {
+        return new FieldRollup__c(
+            Name = this.label,
+            ParentObjectName__c = parentObjectName,
+            ChildObjectName__c = this.childObjectName,
+            ChildRelationshipName__c = this.childRelationshipName,
+            RollupType__c = this.rollupType,
+            RollupFieldName__c = this.rollupFieldName
+        );
     }
 
     private Boolean isCurrency(Schema.DisplayType fieldType) {

@@ -1,13 +1,38 @@
 public with sharing class FieldRollupSvc {
-    
-    public static List<FieldRollup> getFieldRollupsBySObjectId(Id recordId) {
-        List<FieldRollup> resultList = new List<FieldRollup>();
-        String sObjectType = recordId.getSObjectType().getDescribe().getName();
-        List<FieldRollup__c> fieldRollups = FieldRollupData.getFieldRollupsByParentObject(sObjectType);
-        if (fieldRollups.isEmpty()) {
-            return resultList;
-        }
 
+    public static Id saveFieldRollup(FieldRollup fieldRollup) {
+        FieldRollup__c rollupToSave = fieldRollup.convertToSF();
+        insert rollupToSave;
+        return rollupToSave.Id;
+    }
+
+    public static void removeFieldRollup(Id fieldRollupId) {
+        FieldRollup__c fieldRollup = FieldRollupData.getFieldRollupById(fieldRollupId);
+        if (fieldRollup != null) {
+            delete fieldRollup;
+        }
+    }
+    
+    public static FieldRollup getFieldRollupById(Id fieldRollupId, Id parentId) {
+        FieldRollup__c fieldRollup = FieldRollupData.getFieldRollupById(fieldRollupId);
+        if (fieldRollup == null) {
+            return null;
+        }
+        List<FieldRollup> rollups = calculateRollups(new List<FieldRollup__c>{fieldRollup}, fieldRollup.ParentObjectName__c, parentId);
+        return rollups[0];
+    }
+    
+    public static List<FieldRollup> getFieldRollupsByParentId(Id parentId) {
+        String parentObjectType = parentId.getSObjectType().getDescribe().getName();
+        List<FieldRollup__c> fieldRollups = FieldRollupData.getFieldRollupsByParentObject(parentObjectType);
+        if (fieldRollups.isEmpty()) {
+            return new List<FieldRollup>();
+        }
+        return calculateRollups(fieldRollups, parentObjectType, parentId);
+    }
+
+    private static List<FieldRollup> calculateRollups(List<FieldRollup__c> fieldRollups, String parentObjectType, Id parentId) {
+        List<FieldRollup> resultList = new List<FieldRollup>();
         Map<String, List<FieldRollup__c>> childRelationshipToRollupFieldsMap = new Map<String, List<FieldRollup__c>>();
         Map<String, Set<String>> childRelationshipToFieldsMap = new Map<String, Set<String>>();
         for (FieldRollup__c fieldRollup : fieldRollups) {
@@ -29,7 +54,7 @@ public with sharing class FieldRollupSvc {
         }
 
         List<SObject> sObjects = ParentChildData.getParentChildDataByParentId(
-            sObjectType, recordId, childRelationshipToFieldsMap
+            parentObjectType, parentId, childRelationshipToFieldsMap
         );
         if (sObjects.isEmpty()) {
             return resultList;
@@ -44,6 +69,7 @@ public with sharing class FieldRollupSvc {
                     ? calculateRollupValue(childRecords, fieldRollup.RollupFieldName__c, fieldRollup.RollupType__c)
                     : null;
                 resultList.add(new FieldRollup(
+                    fieldRollup.Id,
                     fieldRollup.Name,
                     value,
                     !isCount(fieldRollup.RollupType__c) 

@@ -1,0 +1,8 @@
+.footer_nav {
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+lightning-input, lightning-combobox {
+    margin-bottom: 0.25rem;
+}

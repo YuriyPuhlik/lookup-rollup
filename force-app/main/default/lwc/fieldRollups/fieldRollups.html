@@ -1,20 +1,44 @@
 <template>
     <div class="slds-card">
+        <lightning-spinner if:true={loading} variant="brand" size="medium"></lightning-spinner>
         <div class="slds-card__header slds-grid slds-grid_vertical-align-center slds-m-bottom_medium slds-m-top_xxx-small">
             <span class="slds-col slds-card__header-title slds-m-top_xx-small">{labels.title}</span>
             <lightning-button-icon
-                class="slds-m-left_medium"
+                class="refresh-btn"
+                icon-name="utility:refresh"
+                size="small"
+                disabled={isAddRollup}
+                onclick={refresh}
+            ></lightning-button-icon>
+            <lightning-button-icon
+                class="add-btn slds-m-left_xx-small"
                 icon-name="utility:add"
                 size="small"
+                disabled={isAddRollup}
+                onclick={addRollup}
             ></lightning-button-icon>
         </div>
         <div class="slds-card__body slds-card__body_inner">
-            <template for:each={rollupsToShow} for:item="fieldRollup">
-                <div key={fieldRollup.label} class="rollup">
-                    <div class="label">{fieldRollup.label}</div>
-                    <div class="value">{fieldRollup.formattedValue}</div>
+            <template if:false={isAddRollup} for:each={rollupsToShow} for:item="fieldRollup">
+                <div key={fieldRollup.id} class="rollup">
+                    <div>
+                        <div class="label">{fieldRollup.label}</div>
+                        <div class="value">{fieldRollup.formattedValue}</div>
+                    </div>
+                    <lightning-button-icon
+                        class="remove-btn"
+                        icon-name="utility:delete"
+                        size="small"
+                        data-key={fieldRollup.id}
+                        onclick={removeRollup}
+                    ></lightning-button-icon>
                 </div>
             </template>
+            <c-field-rollup-add
+                if:true={isAddRollup}
+                oncancel={closeRollupAdd}
+                onsave={saveRollup}
+            ></c-field-rollup-add>
         </div>
         <div if:true={isShowFooter} class="slds-card__footer">
             <a if:true={isShowMore} onclick={showMore}>{showMoreLabel}</a>

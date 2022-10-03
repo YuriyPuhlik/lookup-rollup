@@ -1,3 +1,7 @@
+.rollup {
+    display: flex;
+}
+
 .rollup:not(:first-child) {
     padding-top: 0.5rem;
 }
@@ -15,7 +19,17 @@
     text-overflow: ellipsis;
 }
 
+.rollup .remove-btn {
+    margin-left: auto;
+    margin-bottom: 5px;
+    align-self: flex-end;
+}
+
 .slds-card__footer {
     border: none;
     padding-top: 0;
+}
+
+lightning-button-icon.add-btn, lightning-button-icon.refresh-btn {
+    --lwc-colorTextIconDefault: #006dcc;
 }
