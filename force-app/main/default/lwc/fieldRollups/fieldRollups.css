@@ -1,0 +1,21 @@
+.rollup:not(:first-child) {
+    padding-top: 0.5rem;
+}
+
+.rollup:not(:last-child) {
+    border-bottom: 1px solid #dddbda;
+}
+
+.rollup .value {
+    font-size: 1.5rem;
+}
+
+.rollup .label, .rollup .value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.slds-card__footer {
+    border: none;
+    padding-top: 0;
+}

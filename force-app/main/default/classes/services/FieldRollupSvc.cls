@@ -113,6 +113,13 @@ public with sharing class FieldRollupSvc {
                 return newDate;
             } 
             return currentDate;
+        } else if (currentValue instanceOf DateTime && newValue instanceOf DateTime) {
+            DateTime currentDateTime = (DateTime) currentValue;
+            DateTime newDateTime = (DateTime) newValue;
+            if ((isMax && newDateTime > currentDateTime) || (!isMax && newDateTime < currentDateTime)) {
+                return newDateTime;
+            } 
+            return currentDateTime;
         } else {
             Decimal currentNumber = (Decimal) currentValue;
             Decimal newNumber = (Decimal) newValue;

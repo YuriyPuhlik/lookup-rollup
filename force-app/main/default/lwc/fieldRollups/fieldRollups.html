@@ -8,5 +8,17 @@
                 size="small"
             ></lightning-button-icon>
         </div>
+        <div class="slds-card__body slds-card__body_inner">
+            <template for:each={rollupsToShow} for:item="fieldRollup">
+                <div key={fieldRollup.label} class="rollup">
+                    <div class="label">{fieldRollup.label}</div>
+                    <div class="value">{fieldRollup.formattedValue}</div>
+                </div>
+            </template>
+        </div>
+        <div if:true={isShowFooter} class="slds-card__footer">
+            <a if:true={isShowMore} onclick={showMore}>{showMoreLabel}</a>
+            <a if:true={isShowLess} onclick={showLess}>{labels.showLess}</a>
+        </div>
     </div>
 </template>
