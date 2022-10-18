@@ -5,6 +5,7 @@ import removeFieldRollup from '@salesforce/apex/LWCFieldRollupController.removeF
 import LOCALE from '@salesforce/i18n/locale';
 import CURRENCY from '@salesforce/i18n/currency';
 import { formatString } from 'c/constants';
+import ToastService from 'c/toastService';
 
 const ROLLUPS_TO_SHOW = 5;
 
@@ -56,6 +57,7 @@ export default class FieldRollups extends LightningElement {
 
     closeRollupAdd() {
         this.isAddRollup = false;
+        this.showLess();
     }
 
     refresh() {
@@ -89,8 +91,10 @@ export default class FieldRollups extends LightningElement {
                 this.fieldRollups.unshift(this.mapRollup(result));
                 this.closeRollupAdd();
                 this.showLess();
+                ToastService.showSuccessToast('Success', 'Field Rollup was successfully added', this);
             })
             .catch(error => {
+                ToastService.showErrorToast('Save Error', error.body?.message, this);
                 console.error(error)
             })
             .finally (() => {
@@ -107,7 +111,7 @@ export default class FieldRollups extends LightningElement {
                 console.log({fieldRollups: JSON.parse(JSON.stringify(this.fieldRollups))})
             })
             .catch(error => {
-                console.error(error)
+                console.error(error);
             })
             .finally (() => {
                 this.loading = false;

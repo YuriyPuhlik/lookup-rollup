@@ -38,6 +38,19 @@ export default class FieldRollupAdd extends LightningElement {
         return this.fieldRollup.rollupType === 'COUNT';
     }
 
+    get isSaveDisabled() {
+        return !this.isRollupFilled;
+    }
+
+    get isRollupFilled() {
+        return this.fieldRollup &&
+            this.fieldRollup.label &&
+            this.fieldRollup.childObjectName &&
+            this.fieldRollup.childRelationshipName &&
+            this.fieldRollup.rollupType &&
+            (this.isRollupFieldDisabled || this.fieldRollup.rollupFieldName);
+    }
+
     handleInputValueChange($event) {
         const value = $event.target.value;
         const field = $event.target.name;

@@ -18,4 +18,12 @@ public inherited sharing class ParentChildData {
         String query = 'SELECT Id, ' + String.join(subQueries, ', ') + ' FROM ' + parentObject + ' WHERE Id = :parentId';
         return Database.query(query);
     }
+
+    public static List<SObject> getParentChildData(FieldRollup__c fieldRollup) {
+        String subQuery = String.format(
+            CHILD_QUERY_TEMPLATE, new List<String>{FieldRollupSvc.getRollupFieldName(fieldRollup), fieldRollup.ChildRelationshipName__c}
+        );
+        String query = 'SELECT Id, ' + subQuery + ' FROM ' + fieldRollup.ParentObjectName__c + ' LIMIT 1';
+        return Database.query(query);
+    }
 }

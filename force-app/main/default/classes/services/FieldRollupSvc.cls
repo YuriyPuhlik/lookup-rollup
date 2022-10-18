@@ -1,7 +1,10 @@
 public with sharing class FieldRollupSvc {
 
+    public class ValidationException extends Exception {}
+
     public static Id saveFieldRollup(FieldRollup fieldRollup) {
         FieldRollup__c rollupToSave = fieldRollup.convertToSF();
+        validateRollup(rollupToSave);
         insert rollupToSave;
         return rollupToSave.Id;
     }
@@ -31,6 +34,28 @@ public with sharing class FieldRollupSvc {
         return calculateRollups(fieldRollups, parentObjectType, parentId);
     }
 
+    public static String getRollupFieldName(FieldRollup__c fieldRollup) {
+        return isCount(fieldRollup) ? 'Id' : fieldRollup.RollupFieldName__c;
+    }
+
+    private static void validateRollup(FieldRollup__c fieldRollup) {
+        try {
+            ParentChildData.getParentChildData(fieldRollup);
+        } catch (QueryException e) {
+            throwValidationException('Invalid rollup configuration');
+        }
+        if (isCount(fieldRollup)) {
+            return;
+        }
+        Schema.DisplayType fieldType = Utils.getFieldType(fieldRollup.ChildObjectName__c, fieldRollup.RollupFieldName__c);
+        if (
+            !Constants.ROLLUP_TYPE_TO_FIELD_TYPE_MAP.containsKey(fieldRollup.RollupType__c) ||
+            !Constants.ROLLUP_TYPE_TO_FIELD_TYPE_MAP.get(fieldRollup.RollupType__c).contains(fieldType)
+        ) {
+            throwValidationException('Invalid rollup field type');
+        }
+    }
+
     private static List<FieldRollup> calculateRollups(List<FieldRollup__c> fieldRollups, String parentObjectType, Id parentId) {
         List<FieldRollup> resultList = new List<FieldRollup>();
         Map<String, List<FieldRollup__c>> childRelationshipToRollupFieldsMap = new Map<String, List<FieldRollup__c>>();
@@ -44,9 +69,7 @@ public with sharing class FieldRollupSvc {
             if (!childRelationshipToFieldsMap.containsKey(relationshipName)) {
                 childRelationshipToFieldsMap.put(relationshipName, new Set<String>());
             }
-            childRelationshipToFieldsMap.get(relationshipName).add(
-                isCount(fieldRollup.RollupType__c) ? 'Id' : fieldRollup.RollupFieldName__c
-            );
+            childRelationshipToFieldsMap.get(relationshipName).add(getRollupFieldName(fieldRollup));
         }
 
         if (childRelationshipToRollupFieldsMap.isEmpty()) {
@@ -72,7 +95,7 @@ public with sharing class FieldRollupSvc {
                     fieldRollup.Id,
                     fieldRollup.Name,
                     value,
-                    !isCount(fieldRollup.RollupType__c) 
+                    !isCount(fieldRollup) 
                         ? Utils.getFieldType(fieldRollup.ChildObjectName__c, fieldRollup.RollupFieldName__c)
                         : null
                 ));
@@ -156,7 +179,11 @@ public with sharing class FieldRollupSvc {
         }
     }
 
-    private static Boolean isCount(String rollupType) {
-        return rollupType == 'COUNT';
+    private static Boolean isCount(FieldRollup__c fieldRollup) {
+        return fieldRollup.RollupType__c == Constants.ROLLUP_TYPE_COUNT;
+    }
+
+    private static void throwValidationException(String message) {
+        throw new ValidationException(message);
     }
 }

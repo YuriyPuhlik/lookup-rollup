@@ -4,7 +4,7 @@
             name="label"
             type="text" 
             label={labels.label} 
-            value={fieldRollup.value} 
+            value={fieldRollup.label} 
             required="true"
             onchange={handleInputValueChange}
         ></lightning-input>
@@ -50,6 +50,7 @@
         <lightning-button
             label={labels.save}
             variant="brand"
+            disabled={isSaveDisabled}
             onclick={handleSave}
         ></lightning-button>
     </div>
