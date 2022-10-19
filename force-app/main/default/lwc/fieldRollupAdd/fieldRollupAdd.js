@@ -1,9 +1,14 @@
-import { LightningElement, track } from 'lwc';
+import { track, wire } from 'lwc';
+import BaseComponent from 'c/baseComponent';
+import { EVENT_TYPES } from 'c/constants';
+import { getPicklistValues } from 'lightning/uiObjectInfoApi';
+import ROLLUP_TYPE_FIELD from '@salesforce/schema/FieldRollup__c.RollupType__c';
 
-export default class FieldRollupAdd extends LightningElement {
-    @track fieldRollup = {
-        rollupType: 'COUNT'
-    };
+const ROLLUP_TYPE_COUNT = 'COUNT';
+
+export default class FieldRollupAdd extends BaseComponent {
+    @track fieldRollup = {};
+    rollupTypeOptions = [];
     
     labels = {
         label: 'Label',
@@ -15,27 +20,9 @@ export default class FieldRollupAdd extends LightningElement {
         save: 'Save',
     };
 
-    rollupTypeOptions = [
-        {
-            label: 'COUNT',
-            value: 'COUNT'
-        },
-        {
-            label: 'SUM',
-            value: 'SUM'
-        },
-        {
-            label: 'MAX',
-            value: 'MAX'
-        },
-        {
-            label: 'MIN',
-            value: 'MIN'
-        },
-    ];
 
     get isRollupFieldDisabled() {
-        return this.fieldRollup.rollupType === 'COUNT';
+        return this.fieldRollup.rollupType === ROLLUP_TYPE_COUNT;
     }
 
     get isSaveDisabled() {
@@ -51,6 +38,17 @@ export default class FieldRollupAdd extends LightningElement {
             (this.isRollupFieldDisabled || this.fieldRollup.rollupFieldName);
     }
 
+    @wire(getPicklistValues, { recordTypeId: '012000000000000AAA', fieldApiName: ROLLUP_TYPE_FIELD })
+    processResponse({ data, error }) {
+        if (data) {
+            this.rollupTypeOptions = data.values.map(option => ({
+                label: option.label,
+                value: option.value
+            }));
+            this.fieldRollup.rollupType = this.rollupTypeOptions.find(option => option.value === ROLLUP_TYPE_COUNT)?.value;
+        }
+    }
+
     handleInputValueChange($event) {
         const value = $event.target.value;
         const field = $event.target.name;
@@ -62,12 +60,10 @@ export default class FieldRollupAdd extends LightningElement {
     }
 
     handleCancel() {
-        this.dispatchEvent(new CustomEvent('cancel'));
+        this.fire(EVENT_TYPES.CANCEL);
     }
 
     handleSave() {
-        this.dispatchEvent(new CustomEvent('save', {
-            detail: this.fieldRollup
-        }));
+        this.fire(EVENT_TYPES.SAVE, this.fieldRollup);
     }
 }

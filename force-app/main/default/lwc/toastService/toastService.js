@@ -3,11 +3,11 @@ import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class ToastService extends LightningElement {
     
-    static showErrorToast(title, message, context) {
+    static showToastError(title, message, context) {
         this.showToast(title, message, 'error', context);
     }
 
-    static showSuccessToast(title, message, context) {
+    static showToastSuccess(title, message, context) {
         this.showToast(title, message, 'success', context);
     }
 

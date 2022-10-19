@@ -1,15 +1,15 @@
-import { LightningElement, api } from 'lwc';
+import { api } from 'lwc';
+import BaseComponent from 'c/baseComponent';
 import getFieldRollups from '@salesforce/apex/LWCFieldRollupController.getFieldRollups';
 import saveFieldRollup from '@salesforce/apex/LWCFieldRollupController.saveFieldRollup';
 import removeFieldRollup from '@salesforce/apex/LWCFieldRollupController.removeFieldRollup';
 import LOCALE from '@salesforce/i18n/locale';
 import CURRENCY from '@salesforce/i18n/currency';
 import { formatString } from 'c/constants';
-import ToastService from 'c/toastService';
 
 const ROLLUPS_TO_SHOW = 5;
 
-export default class FieldRollups extends LightningElement {
+export default class FieldRollups extends BaseComponent {
     @api recordId;
     @api objectApiName;
 
@@ -21,6 +21,7 @@ export default class FieldRollups extends LightningElement {
         title: 'Rollup Metrics',
         showMore: 'Show more ({0})',
         showLess: 'Show less',
+        toastSaveSuccess: 'Field Rollup was successfully added',
     };
 
     get isShowMore() {
@@ -91,10 +92,10 @@ export default class FieldRollups extends LightningElement {
                 this.fieldRollups.unshift(this.mapRollup(result));
                 this.closeRollupAdd();
                 this.showLess();
-                ToastService.showSuccessToast('Success', 'Field Rollup was successfully added', this);
+                this.showToastSuccess(this.labels.toastSaveSuccess);
             })
             .catch(error => {
-                ToastService.showErrorToast('Save Error', error.body?.message, this);
+                this.showToastError(error.body?.message);
                 console.error(error)
             })
             .finally (() => {
