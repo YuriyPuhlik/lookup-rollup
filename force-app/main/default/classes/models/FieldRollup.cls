@@ -18,6 +18,8 @@ public with sharing class FieldRollup {
     public String rollupType;
     public String rollupFieldName;
 
+    public FieldRollup() {}
+
     public FieldRollup(Id id, String label, Object value, Schema.DisplayType fieldType) {
         this.id = id;
         this.label = label;

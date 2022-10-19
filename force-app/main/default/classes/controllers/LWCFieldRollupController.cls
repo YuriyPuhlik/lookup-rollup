@@ -16,6 +16,9 @@ public with sharing class LWCFieldRollupController {
             Id fieldRollupId = FieldRollupSvc.saveFieldRollup(fieldRollup);
             return FieldRollupSvc.getFieldRollupById(fieldRollupId, fieldRollup.parentId);
         } catch (Exception e) {
+            if (Test.isRunningTest()) {
+                throw e;
+            }
             throw new AuraHandledException(e.getMessage());
         }
     }

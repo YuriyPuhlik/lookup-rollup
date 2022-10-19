@@ -2,6 +2,9 @@ public with sharing class FieldRollupSvc {
 
     public class ValidationException extends Exception {}
 
+    public static final String INVALID_ROLLUP_CONFIGURATION_MESSAGE = 'Invalid rollup configuration';
+    public static final String INVALID_ROLLUP_FIELD_TYPE_MESSAGE = 'Invalid rollup field type';
+
     public static Id saveFieldRollup(FieldRollup fieldRollup) {
         FieldRollup__c rollupToSave = fieldRollup.convertToSF();
         validateRollup(rollupToSave);
@@ -39,10 +42,16 @@ public with sharing class FieldRollupSvc {
     }
 
     private static void validateRollup(FieldRollup__c fieldRollup) {
+        if (
+            !Utils.isObjectTypeValid(fieldRollup.ParentObjectName__c) ||
+            !Utils.isObjectTypeValid(fieldRollup.ChildObjectName__c)
+        ) {
+            throwValidationException(INVALID_ROLLUP_CONFIGURATION_MESSAGE);
+        }
         try {
             ParentChildData.getParentChildData(fieldRollup);
         } catch (QueryException e) {
-            throwValidationException('Invalid rollup configuration');
+            throwValidationException(INVALID_ROLLUP_CONFIGURATION_MESSAGE);
         }
         if (isCount(fieldRollup)) {
             return;
@@ -52,7 +61,7 @@ public with sharing class FieldRollupSvc {
             !Constants.ROLLUP_TYPE_TO_FIELD_TYPE_MAP.containsKey(fieldRollup.RollupType__c) ||
             !Constants.ROLLUP_TYPE_TO_FIELD_TYPE_MAP.get(fieldRollup.RollupType__c).contains(fieldType)
         ) {
-            throwValidationException('Invalid rollup field type');
+            throwValidationException(INVALID_ROLLUP_FIELD_TYPE_MESSAGE);
         }
     }
 
