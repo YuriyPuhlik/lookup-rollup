@@ -155,7 +155,7 @@
     <externalSharingModel>Private</externalSharingModel>
     <label>Field Rollup</label>
     <nameField>
-        <label>Field Rollup Name</label>
+        <label>Label</label>
         <type>Text</type>
     </nameField>
     <pluralLabel>Field Rollups</pluralLabel>
