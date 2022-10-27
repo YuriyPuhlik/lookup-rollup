@@ -1,57 +1,42 @@
 <template>
-    <div class="input-container">
-        <lightning-input
-            name="label"
-            type="text" 
-            label={labels.label} 
-            value={fieldRollup.label} 
-            required="true"
-            onchange={handleInputValueChange}
-        ></lightning-input>
-        <lightning-input
-            name="childObjectName"
-            type="text" 
-            label={labels.childObjectName} 
-            value={fieldRollup.childObjectName} 
-            required="true"
-            onchange={handleInputValueChange}
-        ></lightning-input>
-        <lightning-input
-            name="childRelationshipName"
-            type="text" 
-            label={labels.childRelationshipName} 
-            value={fieldRollup.childRelationshipName} 
-            required="true"
-            onchange={handleInputValueChange}
-        ></lightning-input>
-        <lightning-combobox
-            label={labels.rollupType}
-            value={fieldRollup.rollupType}
-            options={rollupTypeOptions}
-            onchange={handleRollupTypeChange}
-            required="true"
-        ></lightning-combobox>
-        <lightning-input
-            name="rollupFieldName"
-            type="text"
-            label={labels.rollupFieldName}
-            value={fieldRollup.rollupFieldName}
-            disabled={isRollupFieldDisabled}
-            onchange={handleInputValueChange}
-        ></lightning-input>
-    </div>
-    <div class="footer_nav">
-        <lightning-button
-            label={labels.cancel}
-            class="slds-m-right_x-small"
-            variant="neutral"
-            onclick={handleCancel}
-        ></lightning-button>
-        <lightning-button
-            label={labels.save}
-            variant="brand"
-            disabled={isSaveDisabled}
-            onclick={handleSave}
-        ></lightning-button>
+    <lightning-spinner if:false={fieldsInited} variant="brand" size="medium"></lightning-spinner>
+    <div if:true={fieldsInited} class="input-container">
+        <template for:each={fieldsArr} for:item="field">
+            <lightning-input
+                if:false={field.isPicklist}
+                key={field.name}
+                name={field.name}
+                type="text"
+                label={field.label}
+                value={field.value}
+                required={field.isRequired}
+                disabled={field.isDisabled}
+                onchange={handleInputValueChange}
+            ></lightning-input>
+            <lightning-combobox
+                if:true={field.isPicklist}
+                key={field.name}
+                name={field.name}
+                label={field.label}
+                value={field.value}
+                options={field.picklistOptions}
+                required={field.isRequired}
+                onchange={handlePicklistValueChange}
+            ></lightning-combobox>
+        </template>
+        <div class="footer_nav">
+            <lightning-button
+                label={buttons.cancel}
+                class="slds-m-right_x-small"
+                variant="neutral"
+                onclick={handleCancel}
+            ></lightning-button>
+            <lightning-button
+                label={buttons.save}
+                variant="brand"
+                disabled={isSaveDisabled}
+                onclick={handleSave}
+            ></lightning-button>
+        </div>
     </div>
 </template>

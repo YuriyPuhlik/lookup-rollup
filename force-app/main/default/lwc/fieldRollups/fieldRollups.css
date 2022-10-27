@@ -30,6 +30,11 @@
     padding-top: 0;
 }
 
+c-field-rollup-add {
+    display: block;
+    min-height: 336px;
+}
+
 lightning-button-icon.add-btn, lightning-button-icon.refresh-btn {
     --lwc-colorTextIconDefault: #006dcc;
 }

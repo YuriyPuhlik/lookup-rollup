@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    <labels>
+        <fullName>Invalid_Rollup_Configuration_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Invalid_Rollup_Configuration_Message</shortDescription>
+        <value>Invalid rollup configuration</value>
+    </labels>
+    <labels>
+        <fullName>Invalid_Rollup_Field_Type_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Invalid_Rollup_Field_Type_Message</shortDescription>
+        <value>Invalid rollup field type</value>
+    </labels>
+    <labels>
+        <fullName>Save</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Save</shortDescription>
+        <value>Save</value>
+    </labels>
+    <labels>
+        <fullName>Cancel</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Cancel</shortDescription>
+        <value>Cancel</value>
+    </labels>
+    <labels>
+        <fullName>Rollup_Metrics_Title</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Rollup_Metrics_Title</shortDescription>
+        <value>Rollup Metrics</value>
+    </labels>
+    <labels>
+        <fullName>Show_More</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Show_More</shortDescription>
+        <value>Show more ({0})</value>
+    </labels>
+    <labels>
+        <fullName>Show_Less</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Show_Less</shortDescription>
+        <value>Show less</value>
+    </labels>
+    <labels>
+        <fullName>Field_Rollup_Save_Success_Message</fullName>
+        <language>en_US</language>
+        <protected>true</protected>
+        <shortDescription>Field_Rollup_Save_Success_Message</shortDescription>
+        <value>Field Rollup was successfully added</value>
+    </labels>
+</CustomLabels>

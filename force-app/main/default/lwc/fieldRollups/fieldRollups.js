@@ -6,6 +6,7 @@ import removeFieldRollup from '@salesforce/apex/LWCFieldRollupController.removeF
 import LOCALE from '@salesforce/i18n/locale';
 import CURRENCY from '@salesforce/i18n/currency';
 import { formatString } from 'c/constants';
+import { FIELD_ROLLUPS as labels } from 'c/labels';
 
 const ROLLUPS_TO_SHOW = 5;
 
@@ -18,10 +19,10 @@ export default class FieldRollups extends BaseComponent {
     isAddRollup = false;
     loading = false;
     labels = {
-        title: 'Rollup Metrics',
-        showMore: 'Show more ({0})',
-        showLess: 'Show less',
-        toastSaveSuccess: 'Field Rollup was successfully added',
+        title: labels.TITLE,
+        showMore: labels.SHOW_MORE,
+        showLess: labels.SHOW_LESS,
+        saveSuccessMessage: labels.SAVE_SUCCESS_MESSAGE,
     };
 
     get isShowMore() {
@@ -92,7 +93,7 @@ export default class FieldRollups extends BaseComponent {
                 this.fieldRollups.unshift(this.mapRollup(result));
                 this.closeRollupAdd();
                 this.showLess();
-                this.showToastSuccess(this.labels.toastSaveSuccess);
+                this.showToastSuccess(this.labels.saveSuccessMessage);
             })
             .catch(error => {
                 this.showToastError(error.body?.message);
@@ -109,7 +110,6 @@ export default class FieldRollups extends BaseComponent {
             .then(result => {
                 this.fieldRollups = result.map(fieldRollup => this.mapRollup(fieldRollup));
                 this.showLess();
-                console.log({fieldRollups: JSON.parse(JSON.stringify(this.fieldRollups))})
             })
             .catch(error => {
                 console.error(error);

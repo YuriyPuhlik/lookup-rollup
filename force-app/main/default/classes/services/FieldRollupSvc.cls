@@ -2,8 +2,8 @@ public with sharing class FieldRollupSvc {
 
     public class ValidationException extends Exception {}
 
-    public static final String INVALID_ROLLUP_CONFIGURATION_MESSAGE = 'Invalid rollup configuration';
-    public static final String INVALID_ROLLUP_FIELD_TYPE_MESSAGE = 'Invalid rollup field type';
+    public static final String INVALID_ROLLUP_CONFIGURATION_MESSAGE = Label.Invalid_Rollup_Configuration_Message;
+    public static final String INVALID_ROLLUP_FIELD_TYPE_MESSAGE = Label.Invalid_Rollup_Field_Type_Message;
 
     public static Id saveFieldRollup(FieldRollup fieldRollup) {
         FieldRollup__c rollupToSave = fieldRollup.convertToSF();
