@@ -31,4 +31,19 @@ public with sharing class LWCFieldRollupController {
             throw new AuraHandledException(e.getMessage());
         }
     }
+
+    @AuraEnabled
+    public static FieldSettings getFieldSettings(String request) {
+        try {
+            FieldSettingsRequest req = (FieldSettingsRequest) JSON.deserialize(request, FieldSettingsRequest.Class);
+            return FieldRollupFilterSvc.getFieldSettings(req.objectType, req.fieldPath);
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
+    public class FieldSettingsRequest {
+        public String objectType;
+        public String fieldPath;
+    }
 }

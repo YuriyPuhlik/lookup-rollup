@@ -1,7 +1,5 @@
 public with sharing class FieldRollupSvc {
 
-    public class ValidationException extends Exception {}
-
     public static final String INVALID_ROLLUP_CONFIGURATION_MESSAGE = Label.Invalid_Rollup_Configuration_Message;
     public static final String INVALID_ROLLUP_FIELD_TYPE_MESSAGE = Label.Invalid_Rollup_Field_Type_Message;
 
@@ -46,12 +44,12 @@ public with sharing class FieldRollupSvc {
             !Utils.isObjectTypeValid(fieldRollup.ParentObjectName__c) ||
             !Utils.isObjectTypeValid(fieldRollup.ChildObjectName__c)
         ) {
-            throwValidationException(INVALID_ROLLUP_CONFIGURATION_MESSAGE);
+            ValidationException.throwException(INVALID_ROLLUP_CONFIGURATION_MESSAGE);
         }
         try {
             ParentChildData.getParentChildData(fieldRollup);
         } catch (QueryException e) {
-            throwValidationException(INVALID_ROLLUP_CONFIGURATION_MESSAGE);
+            ValidationException.throwException(INVALID_ROLLUP_CONFIGURATION_MESSAGE);
         }
         if (isCount(fieldRollup)) {
             return;
@@ -61,7 +59,7 @@ public with sharing class FieldRollupSvc {
             !Constants.ROLLUP_TYPE_TO_FIELD_TYPE_MAP.containsKey(fieldRollup.RollupType__c) ||
             !Constants.ROLLUP_TYPE_TO_FIELD_TYPE_MAP.get(fieldRollup.RollupType__c).contains(fieldType)
         ) {
-            throwValidationException(INVALID_ROLLUP_FIELD_TYPE_MESSAGE);
+            ValidationException.throwException(INVALID_ROLLUP_FIELD_TYPE_MESSAGE);
         }
     }
 
@@ -190,9 +188,5 @@ public with sharing class FieldRollupSvc {
 
     private static Boolean isCount(FieldRollup__c fieldRollup) {
         return fieldRollup.RollupType__c == Constants.ROLLUP_TYPE_COUNT;
-    }
-
-    private static void throwValidationException(String message) {
-        throw new ValidationException(message);
     }
 }
