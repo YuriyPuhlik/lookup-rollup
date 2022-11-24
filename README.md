@@ -1,18 +1,11 @@
-# Salesforce DX Project: Next Steps
+# Field Rollups
 
-Now that you’ve created a Salesforce DX project, what’s next? Here are some documentation resources to get you started.
+The project contains a flexible lwc component called **Field Rollups**, which can be placed at any record page to calculate rollup values based on any child relationship type, be it lookup or master-detail. Here is an example of its usage on Account record page:
 
-## How Do You Plan to Deploy Your Changes?
+https://www.loom.com/share/ca4d261d95074e8ca5efb627324eadfd
 
-Do you want to deploy a set of changes, or create a self-contained application? Choose a [development model](https://developer.salesforce.com/tools/vscode/en/user-guide/development-models).
-
-## Configure Your Salesforce DX Project
-
-The `sfdx-project.json` file contains useful configuration information for your project. See [Salesforce DX Project Configuration](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_ws_config.htm) in the _Salesforce DX Developer Guide_ for details about this file.
-
-## Read All About It
-
-- [Salesforce Extensions Documentation](https://developer.salesforce.com/tools/vscode/)
-- [Salesforce CLI Setup Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_setup.meta/sfdx_setup/sfdx_setup_intro.htm)
-- [Salesforce DX Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.sfdx_dev.meta/sfdx_dev/sfdx_dev_intro.htm)
-- [Salesforce CLI Command Reference](https://developer.salesforce.com/docs/atlas.en-us.sfdx_cli_reference.meta/sfdx_cli_reference/cli_reference.htm)
+## Steps to configure the component at the Salesforce org:
+1. Pull changes from the **develop** branch
+2. Push source code to the Salesforce org
+3. Assign **Field Rollups Manager** permission set to your user or to those who will configure the component.
+4. Go the record page editor, find the component **Field Rollups** among custom ones and drag & drop it to the necessary page area.
