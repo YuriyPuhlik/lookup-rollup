@@ -99,12 +99,12 @@ public with sharing class FieldRollupSvc {
             for (FieldRollup__c fieldRollup : childFieldRollups) {
                 Object value = childRecords != null && !childRecords.isEmpty() 
                     ? calculateRollupValue(childRecords, fieldRollup.RollupFieldName__c, fieldRollup.RollupType__c)
-                    : null;
+                    : isCount(fieldRollup) ? 0 : null;
                 resultList.add(new FieldRollup(
                     fieldRollup.Id,
                     fieldRollup.Name,
                     value,
-                    !isCount(fieldRollup) 
+                    !isCount(fieldRollup)
                         ? Utils.getFieldType(fieldRollup.ChildObjectName__c, fieldRollup.RollupFieldName__c)
                         : null
                 ));

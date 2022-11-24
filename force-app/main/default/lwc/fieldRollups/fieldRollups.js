@@ -120,7 +120,7 @@ export default class FieldRollups extends BaseComponent {
     }
 
     mapRollup(fieldRollup) {
-        if (!fieldRollup.value) {
+        if (!fieldRollup.value && fieldRollup.value !== 0) {
             fieldRollup.formattedValue = '-';
         } else if (fieldRollup.isCurrency) {
             fieldRollup.formattedValue = new Intl.NumberFormat(LOCALE, {
